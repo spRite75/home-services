@@ -1,6 +1,12 @@
 version: "3.7"
 
 services:
+  scout:
+    image: sprite75/${SCOUT_ARM_PREFIX}scout_realtime
+    ports:
+      - "5555:5555"
+    pid: host
+
   caddy:
     image: caddy:2.4.3
     restart: unless-stopped
@@ -47,4 +53,20 @@ services:
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     privileged: true
-    network_mode: host
+    networks:
+      - homeassistant_vlan
+    cap_add: 
+      - NET_ADMIN
+
+
+networks:
+  homeassistant_vlan:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.96.0/24
+          ip_range: 192.168.96.4/32
+          gateway: 192.168.96.1
