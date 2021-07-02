@@ -28,7 +28,7 @@ services:
       - /dev/vchiq:/dev/vchiq
   
   catcam:
-    image: datarhei/restreamer:latest
+    image: datarhei/restreamer${RESTREAMER_ARM_TAG}:latest
     restart: unless-stopped
     ports:
       - "${CATCAM_PORT}:8080"
@@ -37,6 +37,8 @@ services:
       RS_PASSWORD: ${CATCAM_PASSWORD}
     volumes:
       - ./catcam:/restreamer/db
+    tmpfs:
+      - /tmp/hls
   
   homeassistant:
     image:  homeassistant/home-assistant:stable
