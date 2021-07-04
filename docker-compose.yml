@@ -45,6 +45,11 @@ services:
       - ./catcam:/restreamer/db
     tmpfs:
       - /tmp/hls
+
+  linespeedtest:
+    image: openspeedtest/latest
+    ports: 
+      - "6969:8080"
   
   homeassistant:
     image:  homeassistant/home-assistant:stable
