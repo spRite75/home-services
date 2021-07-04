@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  scout:
+     extends:
+      file: pi-services.yml
+      service: scout
+
+  linespeedtest:
+    extends:
+      file: pi-services.yml
+      service: linespeedtest
+
+  mealie:
+    image: hkotel/mealie:latest
+    restart: unless-stopped
+    ports:
+      - 9925:80
+    environment:
+      TZ: Australia/Melbourne
+    volumes:
+      - ./persistence/mealie/app-data/:/app/data
