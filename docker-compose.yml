@@ -3,6 +3,7 @@ version: "3.7"
 services:
   scout:
     image: sprite75/${SCOUT_ARM_PREFIX}scout_realtime
+    restart: unless-stopped
     ports:
       - "5555:5555"
     pid: host
@@ -48,15 +49,26 @@ services:
 
   linespeedtest:
     image: openspeedtest/latest
+    restart: unless-stopped
     ports: 
       - "6969:8080"
+
+  mealie:
+    image: hkotel/mealie:latest
+    restart: unless-stopped
+    ports:
+      - 9925:80
+    environment:
+      TZ: Australia/Melbourne
+    volumes:
+      - ./mealie/app-data/:/app/data
   
   homeassistant:
     image:  homeassistant/home-assistant:stable
+    restart: unless-stopped
     volumes:
       - ./homeassistant/config:/config
       - /etc/localtime:/etc/localtime:ro
-    restart: unless-stopped
     privileged: true
     networks:
       - homeassistant_vlan
