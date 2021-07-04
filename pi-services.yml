@@ -15,9 +15,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./caddy/data:/data
-      - ./caddy/config:/caddy_config
+      - ./persistence/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./persistence/caddy/data:/data
+      - ./persistence/caddy/config:/caddy_config
 
   jellyfin:
     image: jellyfin/jellyfin
@@ -28,8 +28,8 @@ services:
       # - "1900:1900"
       # - "7359:7359"
     volumes:
-      - ./jellyfin/config:/config
-      - ./jellyfin/cache:/cache
+      - ./persistence/jellyfin/config:/config
+      - ./persistence/jellyfin/cache:/cache
       - ${JELLYFIN_MEDIA}:/media
     devices:
       - /dev/vchiq:/dev/vchiq
@@ -43,7 +43,7 @@ services:
       RS_USERNAME: admin
       RS_PASSWORD: ${CATCAM_PASSWORD}
     volumes:
-      - ./catcam:/restreamer/db
+      - ./persistence/catcam:/restreamer/db
     tmpfs:
       - /tmp/hls
 
@@ -52,22 +52,12 @@ services:
     restart: unless-stopped
     ports: 
       - "6969:8080"
-
-  mealie:
-    image: hkotel/mealie:latest
-    restart: unless-stopped
-    ports:
-      - 9925:80
-    environment:
-      TZ: Australia/Melbourne
-    volumes:
-      - ./mealie/app-data/:/app/data
   
   homeassistant:
     image:  homeassistant/home-assistant:stable
     restart: unless-stopped
     volumes:
-      - ./homeassistant/config:/config
+      - ./persistence/homeassistant/config:/config
       - /etc/localtime:/etc/localtime:ro
     privileged: true
     networks:
