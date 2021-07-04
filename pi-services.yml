@@ -1,13 +1,6 @@
 version: "3.7"
 
 services:
-  scout:
-    image: sprite75/${SCOUT_ARM_PREFIX}scout_realtime
-    restart: unless-stopped
-    ports:
-      - "5555:5555"
-    pid: host
-
   caddy:
     image: caddy:2.4.3
     restart: unless-stopped
@@ -18,6 +11,27 @@ services:
       - ./persistence/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./persistence/caddy/data:/data
       - ./persistence/caddy/config:/caddy_config
+  
+  duckdns:
+    image: linuxserver/duckdns:arm32v7-latest
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+      SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
+      TOKEN: ${DUCKDNS_TOKEN}
+
+  scout:
+    image: sprite75/${SCOUT_ARM_PREFIX}scout_realtime
+    restart: unless-stopped
+    ports:
+      - "5555:5555"
+    pid: host
+
+  linespeedtest:
+    image: openspeedtest/latest
+    restart: unless-stopped
+    ports: 
+      - "6969:8080"
 
   jellyfin:
     image: jellyfin/jellyfin
@@ -46,12 +60,6 @@ services:
       - ./persistence/catcam:/restreamer/db
     tmpfs:
       - /tmp/hls
-
-  linespeedtest:
-    image: openspeedtest/latest
-    restart: unless-stopped
-    ports: 
-      - "6969:8080"
   
   homeassistant:
     image:  homeassistant/home-assistant:stable
@@ -64,7 +72,6 @@ services:
       - homeassistant_vlan
     cap_add: 
       - NET_ADMIN
-
 
 networks:
   homeassistant_vlan:

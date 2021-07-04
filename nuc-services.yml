@@ -17,6 +17,6 @@ services:
     ports:
       - 9925:80
     environment:
-      TZ: Australia/Melbourne
+      TZ: ${TZ}
     volumes:
       - ./persistence/mealie/app-data/:/app/data
