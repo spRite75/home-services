@@ -23,6 +23,7 @@ services:
   namecheap-ddns:
     build:
       context: ./namecheap-ddns
+    restart: unless-stopped
     environment:
       TZ: ${TZ}
       DDNS_DOMAIN: ${DDNS_DOMAIN}
