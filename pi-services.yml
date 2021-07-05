@@ -71,26 +71,26 @@ services:
     tmpfs:
       - /tmp/hls
   
-  # homeassistant:
-  #   image:  homeassistant/home-assistant:stable
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./persistence/homeassistant/config:/config
-  #     - /etc/localtime:/etc/localtime:ro
-  #   privileged: true
-  #   networks:
-  #     - homeassistant_vlan
-  #   cap_add: 
-  #     - NET_ADMIN
+  homeassistant:
+    image:  homeassistant/home-assistant:stable
+    restart: unless-stopped
+    volumes:
+      - ./persistence/homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    privileged: true
+    networks:
+      - homeassistant_vlan
+    cap_add: 
+      - NET_ADMIN
 
-# networks:
-#   homeassistant_vlan:
-#     driver: macvlan
-#     driver_opts:
-#       parent: eth0
-#     ipam:
-#       driver: default
-#       config:
-#         - subnet: 192.168.96.0/24
-#           ip_range: 192.168.96.4/32
-#           gateway: 192.168.96.1
+networks:
+  homeassistant_vlan:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.96.0/24
+          ip_range: 192.168.96.4/32
+          gateway: 192.168.96.1
