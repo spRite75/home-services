@@ -79,6 +79,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     privileged: true
     networks:
+      - default
       - homeassistant_vlan
     cap_add: 
       - NET_ADMIN
