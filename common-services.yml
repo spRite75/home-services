@@ -5,11 +5,11 @@ services:
     image: sprite75/${SCOUT_ARM_PREFIX}scout_realtime
     restart: unless-stopped
     ports:
-      - "${SCOUT_PORT}:5555"
+      - "${SCOUT_PORT:5555}:5555"
     pid: host
 
   linespeedtest:
     image: openspeedtest/latest
     restart: unless-stopped
     ports: 
-      - "${SPEEDTEST_PORT}:8080"
+      - "${SPEEDTEST_PORT:8080}:8080"
