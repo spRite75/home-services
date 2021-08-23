@@ -11,14 +11,6 @@ services:
       - ./persistence/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./persistence/caddy/data:/data
       - ./persistence/caddy/config:/caddy_config
-  
-  duckdns:
-    image: linuxserver/duckdns:arm32v7-latest
-    restart: unless-stopped
-    environment:
-      TZ: ${TZ}
-      SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
-      TOKEN: ${DUCKDNS_TOKEN}
 
   namecheap-ddns:
     build:
@@ -31,17 +23,14 @@ services:
       DDNS_PASSWORD: ${DDNS_PASSWORD}
 
   scout:
-    image: sprite75/${SCOUT_ARM_PREFIX}scout_realtime
-    restart: unless-stopped
-    ports:
-      - "5555:5555"
-    pid: host
+     extends:
+      file: common-services.yml
+      service: scout
 
   linespeedtest:
-    image: openspeedtest/latest
-    restart: unless-stopped
-    ports: 
-      - "6969:8080"
+    extends:
+      file: common-services.yml
+      service: linespeedtest
 
   jellyfin:
     image: jellyfin/jellyfin

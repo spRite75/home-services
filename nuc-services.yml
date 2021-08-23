@@ -3,10 +3,10 @@ version: "3.7"
 services:
   scout:
      extends:
-      file: pi-services.yml
+      file: common-services.yml
       service: scout
 
   linespeedtest:
     extends:
-      file: pi-services.yml
+      file: common-services.yml
       service: linespeedtest
