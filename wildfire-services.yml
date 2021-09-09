@@ -10,3 +10,24 @@ services:
     extends:
       file: common-services.yml
       service: linespeedtest
+
+  jellyfin:
+    image: jellyfin/jellyfin
+    restart: unless-stopped
+    ports:
+      - "8096:8096"
+      # - "8920:8920"
+      # - "1900:1900"
+      # - "7359:7359"
+    volumes:
+      - ${JELLYFIN_PERSISTENCE_ROOT}/config:/config
+      - ${JELLYFIN_PERSISTENCE_ROOT}/cache:/cache
+      - ${JELLYFIN_MEDIA}:/media
+    environment:
+        NVIDIA_DRIVER_CAPABILITIES: all
+        NVIDIA_VISIBLE_DEVICES: all
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - capabilities: [gpu]
