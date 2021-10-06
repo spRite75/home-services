@@ -10,3 +10,12 @@ services:
     extends:
       file: common-services.yml
       service: linespeedtest
+
+  namecheap-ddns:
+    image: sprite75/namecheap_ddns
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+      DDNS_DOMAIN: ${DDNS_DOMAIN}
+      DDNS_SUBDOMAINS: ${DDNS_SUBDOMAINS}
+      DDNS_PASSWORD: ${DDNS_PASSWORD}
