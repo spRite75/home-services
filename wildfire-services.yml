@@ -31,3 +31,38 @@ services:
         reservations:
           devices:
           - capabilities: [gpu]
+
+  tubearchivist:
+    image: bbilly1/tubearchivist:latest
+    restart: unless-stopped
+    ports:
+      - ${TUBEARCHIVIST_PORT}:8000
+    volumes:
+      - ${TUBEARCHIVIST_MEDIA}:/youtube
+      - ${TUBEARCHIVIST_PERSISTENCE_ROOT}/cache:/cache
+    environment:
+      - ES_URL=http://tubearchivist-es:9200
+      - REDIS_HOST=tubearchivist-redis
+      - HOST_UID=1000
+      - HOST_GID=1000
+    depends_on:
+      - tubearchivist-redis
+  tubearchivist-redis:
+    image: redislabs/rejson:latest
+    restart: unless-stopped
+    volumes:
+      - ${TUBEARCHIVIST_PERSISTENCE_ROOT}/redis:/data
+    depends_on:
+      - tubearchivist-es
+  tubearchivist-es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
+    restart: unless-stopped
+    environment:
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ${TUBEARCHIVIST_PERSISTENCE_ROOT}/es:/usr/share/elasticsearch/data
