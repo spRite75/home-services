@@ -66,3 +66,12 @@ services:
         hard: -1
     volumes:
       - ${TUBEARCHIVIST_PERSISTENCE_ROOT}/es:/usr/share/elasticsearch/data
+    
+  navidrome:
+    image: deluan/navidrome:latest
+    ports:
+      - "${NAVIDROME_PORT}:4533"
+    restart: unless-stopped
+    volumes:
+      - "${NAVIDROME_PERSISTENCE_ROOT}/data:/data"
+      - "${NAVIDROME_MEDIA}:/music:ro"
