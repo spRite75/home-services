@@ -72,6 +72,11 @@ services:
     ports:
       - "${NAVIDROME_PORT}:4533"
     restart: unless-stopped
+    environment:
+      ND_SPOTIFY_ID: ${NAVIDROME_SPOTIFY_ID}
+      ND_SPOTIFY_SECRET: ${NAVIDROME_SPOTIFY_SECRET}
+      ND_LASTFM_APIKEY: ${NAVIDROME_LASTFM_KEY}
+      ND_LASTFM_SECRET: ${NAVIDROME_LASTFM_SECRET}
     volumes:
       - "${NAVIDROME_PERSISTENCE_ROOT}/data:/data"
       - "${NAVIDROME_MEDIA}:/music:ro"
