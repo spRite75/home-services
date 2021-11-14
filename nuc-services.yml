@@ -66,3 +66,17 @@ services:
       - ./persistence/tandoor/staticfiles:/static
       - ./persistence/tandoor/mediafiles:/media
 
+  bazarr:
+    image: lscr.io/linuxserver/bazarr
+    restart: unless-stopped
+    environment:
+      PUID: ${BAZARR_UID}
+      PGID: ${BAZARR_GID}
+      TZ: ${TZ}
+    volumes:
+      - ./persistence/bazarr/config:/config
+      - ${BAZARR_MOVIES_MOUNT}
+      - ${BAZARR_TV_MOUNT}
+    ports:
+      - ${BAZARR_PORT}:6767
+
