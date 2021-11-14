@@ -33,6 +33,8 @@ services:
           - capabilities: [gpu]
 
   tubearchivist:
+    depends_on:
+      - tubearchivist-redis
     image: bbilly1/tubearchivist:latest
     restart: unless-stopped
     ports:
@@ -45,27 +47,34 @@ services:
       REDIS_HOST: tubearchivist-redis
       HOST_UID: ${TUBEARCHIVIST_UID}
       HOST_GID: ${TUBEARCHIVIST_GID}
-    depends_on:
-      - tubearchivist-redis
+      TA_USERNAME: ${TUBEARCHIVIST_USERNAME}
+      TA_PASSWORD: ${TUBEARCHIVIST_PASSWORD}
+      ELASTIC_PASSWORD: ${TUBEARCHIVIST_ELASTIC_PASSWORD}
   tubearchivist-redis:
+    depends_on:
+      - tubearchivist-es
     image: redislabs/rejson:latest
     restart: unless-stopped
     volumes:
       - ${TUBEARCHIVIST_PERSISTENCE_ROOT}/redis:/data
-    depends_on:
-      - tubearchivist-es
+    expose:
+      - "6379"
   tubearchivist-es:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
     restart: unless-stopped
     environment:
-      - "discovery.type=single-node"
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      "discovery.type": single-node
+      "xpack.security.enabled": "true"
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ELASTIC_PASSWORD: ${TUBEARCHIVIST_ELASTIC_PASSWORD}
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
       - ${TUBEARCHIVIST_PERSISTENCE_ROOT}/es:/usr/share/elasticsearch/data
+    expose:
+      - "9200"
     
   navidrome:
     image: deluan/navidrome:latest
