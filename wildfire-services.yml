@@ -21,6 +21,7 @@ services:
       # - "7359:7359"
     volumes:
       - ${JELLYFIN_PERSISTENCE_ROOT}/config:/config
+      - ${JELLYFIN_PERSISTENCE_ROOT}/transcodes:/transcodes
       - ${JELLYFIN_PERSISTENCE_ROOT}/cache:/cache
       - ${JELLYFIN_MEDIA}:/media
     environment:
@@ -35,7 +36,7 @@ services:
   tubearchivist:
     depends_on:
       - tubearchivist-redis
-    image: bbilly1/tubearchivist:latest
+    image: bbilly1/tubearchivist:v0.0.9
     restart: unless-stopped
     ports:
       - ${TUBEARCHIVIST_PORT}:8000
@@ -43,6 +44,7 @@ services:
       - ${TUBEARCHIVIST_MEDIA}:/youtube
       - ${TUBEARCHIVIST_PERSISTENCE_ROOT}/cache:/cache
     environment:
+      TZ: ${TZ}
       ES_URL: http://tubearchivist-es:9200
       REDIS_HOST: tubearchivist-redis
       HOST_UID: ${TUBEARCHIVIST_UID}
