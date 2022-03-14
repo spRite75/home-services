@@ -145,6 +145,9 @@ services:
     ports:
       - "${HEADSHOTBOX_PORT}:4000"
     restart: unless-stopped
+    environment:
+      - HEADSHOTBOX_ADMIN_STEAMID64
+      - HEADSHOTBOX_OPENID_REALM
     volumes:
       - ./persistence/headshotbox/config:/config
       - ${HEADSHOTBOX_DEMOS_ROOT}:/demos
