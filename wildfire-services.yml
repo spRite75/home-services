@@ -151,3 +151,9 @@ services:
     volumes:
       - ./persistence/headshotbox/config:/config
       - ${HEADSHOTBOX_DEMOS_ROOT}:/demos
+
+  headshotbox-restarter:
+    image: docker
+    volumes: ["/var/run/docker.sock:/var/run/docker.sock"]
+    command: ["/bin/sh", "-c", "while true; do sleep 3600; docker restart home-services_headshotbox_1; done"]
+    restart: unless-stopped
